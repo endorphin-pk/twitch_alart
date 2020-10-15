@@ -1,6 +1,6 @@
 import requests
 from urllib import parse
-from datetime import datetime, timedelta
+from datetime import datetime
 import urllib.request
 
 debug = False
@@ -22,7 +22,7 @@ def is_expired():
     global ttl
     nowtime = datetime.now()
     if (ttl < (nowtime - expired_time).second):
-        return True
+        return (nowtime - expired_time).second
     else:
         return False
 
@@ -39,7 +39,7 @@ def make_token():
     global client_secret
 
     code_get_url = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id={}&state={}&redirect_uri={}"
-    code_get_url = code_get_url.format("r2nZOh5yD_S1QXZCwGbg", "REWERWERTATE", "http://localhost/")
+    code_get_url = code_get_url.format("{}".format(client_id), "REWERWERTATE", "http://localhost/")
 
     print(code_get_url)
     result_url = input()
@@ -57,8 +57,8 @@ def make_token():
     access_url = "https://nid.naver.com/oauth2.0/token"
     access_data = {
         "grant_type": "authorization_code",
-        "client_id": "r2nZOh5yD_S1QXZCwGbg",
-        "client_secret": "2o3UFYxv3r",
+        "client_id": "{}".format(client_id),
+        "client_secret": "{}".format(client_secret),
         "code": "{}".format(code),
         "state": "{}".format(state)
     }
@@ -66,34 +66,61 @@ def make_token():
         print(access_data)
 
     res = requests.get(access_url, params=access_data)
-    res.json()
-
+    if("error" in res.json()):
+        if(debug==True):
+            print("{}\n{}".format(res.json()["error"],res.json()["error_description"]))
+        return False
     ## 정보 backup
     access_token = res.json()['access_token']
     refresh_token = res.json()['refresh_token']
     if (debug == True):
         print("Access_token = {}".format(access_token))
-
+    return True
 
 def rfresh_token():
     global access_token
+    global client_id
+    global client_secret
+    global refresh_token
 
     access_url = "https://nid.naver.com/oauth2.0/token"
     access_data = {
         "grant_type": "authorization_code",
-        "client_id": "r2nZOh5yD_S1QXZCwGbg",
-        "client_secret": "2o3UFYxv3r",
+        "client_id": "{}".format(client_id),
+        "client_secret": "{}".format(client_secret),
         "refresh_token": "{}".format(refresh_token)
     }
     if (debug == True):
         print(access_data)
 
     res = requests.get(access_url, params=access_data)
+
+    if ("error" in res.json()):
+        if (debug == True):
+            print("{}\n{}".format(res.json()["error"], res.json()["error_description"]))
+        return False
     access_token = res.json()["access_token"]
+    return True
 
 def del_token():
-    # del
-    print('')
+    global access_token
+    global client_id
+    global client_secret
+
+    access_url = "https://nid.naver.com/oauth2.0/token"
+    access_data = {
+        "grant_type": "delete",
+        "client_id": "{}".format(client_id),
+        "client_secret": "{}".format(client_secret),
+        "access_token": "{}".format(parse.quote(access_token)),
+        "service_provider":"NAVER"
+    }
+    res=requests.get(access_url,params=access_data)
+    if ("error" in res.json()):
+        if (debug == True):
+            print("{}\n{}".format(res.json()["error"], res.json()["error_description"]))
+        return False
+    return True
 
 
 def write_cafe(title,text):
@@ -107,7 +134,8 @@ def write_cafe(title,text):
 
     print("{}\n{}".format(subject, content))
     data = "subject=" + subject + "&content=" + content
-    request = urllib.request.Request(url, data=data.encode("utf-8"))
+    data_enc=data.encode("utf-8")
+    request = urllib.request.Request(url, data=data_enc)
     request.add_header("Authorization", header)
     response = urllib.request.urlopen(request)
     rescode = response.getcode()
