@@ -3,3 +3,4 @@ __pycache__/
 
 # Editer files
 .vscode/
+.idea/
