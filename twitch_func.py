@@ -1,6 +1,6 @@
 import requests
 
-object_streamer="2chamcham2"
+object_streamer="kotlin_kt"
 
 client_id="le6caf43yq3470507wbtp65zhckxlp"
 client_secret="in03cyccix7i8ad48614dvfh7lm3x3"

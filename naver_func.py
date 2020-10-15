@@ -36,6 +36,7 @@ def make_token():
     global access_token
     global refresh_token
     global client_id
+    global ttl
     global client_secret
 
     code_get_url = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id={}&state={}&redirect_uri={}"
@@ -73,12 +74,14 @@ def make_token():
     ## 정보 backup
     access_token = res.json()['access_token']
     refresh_token = res.json()['refresh_token']
+    ttl=int(res.json()["expires_in"])
     if (debug == True):
         print("Access_token = {}".format(access_token))
     return True
 
 def rfresh_token():
     global access_token
+    global ttl
     global client_id
     global client_secret
     global refresh_token
@@ -100,6 +103,7 @@ def rfresh_token():
             print("{}\n{}".format(res.json()["error"], res.json()["error_description"]))
         return False
     access_token = res.json()["access_token"]
+    ttl=int(res.json()["expires_in"])
     return True
 
 def del_token():
@@ -120,27 +124,34 @@ def del_token():
         if (debug == True):
             print("{}\n{}".format(res.json()["error"], res.json()["error_description"]))
         return False
+    access_token=""
     return True
 
 
 def write_cafe(title,text):
     global access_token
+
     header = "Bearer " + access_token  # Bearer 다음에 공백 추가
     clubid = "30248603"  # 카페의 고유 ID값
     menuid = "1"  # (상품게시판은 입력 불가)
     url = "https://openapi.naver.com/v1/cafe/" + clubid + "/menu/" + menuid + "/articles"
     subject = parse.quote(title)
     content = parse.quote(text)
-
-    print("{}\n{}".format(subject, content))
+    if(debug==True):
+        print("{}\n{}".format(subject, content))
     data = "subject=" + subject + "&content=" + content
     data_enc=data.encode("utf-8")
     request = urllib.request.Request(url, data=data_enc)
     request.add_header("Authorization", header)
     response = urllib.request.urlopen(request)
+
     rescode = response.getcode()
     if (rescode == 200):
         response_body = response.read()
-        print(response_body.decode('utf-8'))
+        if(debug==True):
+            print(response_body.decode('utf-8'))
+        return True
     else:
-        print("Error Code:" + rescode)
+        if(debug==True):
+            print("Error Code:" + rescode)
+        return False
