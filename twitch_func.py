@@ -1,16 +1,16 @@
 import requests
+import options
 
 object_streamer="kotlin_kt"
 
-client_id="le6caf43yq3470507wbtp65zhckxlp"
-client_secret="in03cyccix7i8ad48614dvfh7lm3x3"
+client_id=options.twitch_id
+client_secret=options.twitch_secret
 
 access_token=""
 
 def make_token():
     global client_id
     global client_secret
-    #global refresh_token
     global access_token
     res=requests.post('https://id.twitch.tv/oauth2/token?client_id={}&client_secret={}&grant_type=client_credentials'.format(client_id,client_secret)).json()
     if("error" in res):

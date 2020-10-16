@@ -2,8 +2,7 @@ import requests
 from urllib import parse
 from datetime import datetime
 import urllib.request
-
-debug = False
+import options
 
 code = ""
 state = ""
@@ -12,9 +11,9 @@ expired_time = ""
 ttl = ""
 access_token = ""
 refresh_token = ""
-client_id = "r2nZOh5yD_S1QXZCwGbg"
-client_secret = "2o3UFYxv3r"
-
+client_id = options.naver_id
+client_secret = options.naver_secret
+debug = options.debug
 
 # noinspection PyTypeChecker
 def is_expired():
@@ -88,7 +87,7 @@ def rfresh_token():
 
     access_url = "https://nid.naver.com/oauth2.0/token"
     access_data = {
-        "grant_type": "authorization_code",
+        "grant_type": "refresh_token",
         "client_id": "{}".format(client_id),
         "client_secret": "{}".format(client_secret),
         "refresh_token": "{}".format(refresh_token)
@@ -132,8 +131,8 @@ def write_cafe(title,text):
     global access_token
 
     header = "Bearer " + access_token  # Bearer 다음에 공백 추가
-    clubid = "30248603"  # 카페의 고유 ID값
-    menuid = "1"  # (상품게시판은 입력 불가)
+    clubid = options.cafe_clubid
+    menuid = options.cafe_menuid
     url = "https://openapi.naver.com/v1/cafe/" + clubid + "/menu/" + menuid + "/articles"
     subject = parse.quote(title)
     content = parse.quote(text)
