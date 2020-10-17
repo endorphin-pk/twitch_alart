@@ -1,7 +1,7 @@
 import requests
 import options
 
-object_streamer="kotlin_kt"
+object_streamer=options.streamer
 
 client_id=options.twitch_id
 client_secret=options.twitch_secret

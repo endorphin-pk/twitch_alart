@@ -9,6 +9,8 @@ text=options.text
 online_log=False
 naver_func.make_token()
 debug=options.debug
+if(debug==True):
+    options.cafe_menuid="4"
 
 if(debug==True):
     refresh_term = 10
