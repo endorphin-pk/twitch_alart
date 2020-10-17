@@ -23,7 +23,7 @@ while True:
     else:
         naver_func.rfresh_token()
     twitch_func.make_token()
-    if(twitch_func.is_streaming()==True and online_log==False):#started
+    if(twitch_func.is_streaming()==True):#started
         if(online_log==False):
             online_log=True
             print("{}\'s broadcast was started:{}".format(twitch_func.object_streamer,datetime.now()))
