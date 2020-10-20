@@ -24,6 +24,7 @@ while True:
         tmp=naver_func.rfresh_token()
         if(tmp==False):
             print("Error")
+            break
     else:
         naver_func.rfresh_token()
     twitch_func.make_token()
