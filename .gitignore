@@ -1,7 +1,10 @@
+#options and secret
+options.py
+secret.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
 # Editer files
 .vscode/
 .idea/
-
