@@ -4,13 +4,15 @@ from time import sleep
 from datetime import datetime
 import options
 
-title=options.title
-text=options.text
+
+title="ON AIR"
+text="ON AIR\ntwitch.tv/{}".format(options.streamer)
 online_log=False
 naver_func.make_token()
 debug=options.debug
 if(debug==True):
-    options.cafe_menuid="4"
+    options.cafe_clubid=options.debug_cafe_clubid
+    options.cafe_menuid=options.debug_cafe_menuid
 
 if(debug==True):
     refresh_term = 10

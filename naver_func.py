@@ -3,6 +3,7 @@ from urllib import parse
 from datetime import datetime
 import urllib.request
 import options
+import secret
 
 code = ""
 state = ""
@@ -11,8 +12,8 @@ expired_time = ""
 ttl = ""
 access_token = ""
 refresh_token = ""
-client_id = options.naver_id
-client_secret = options.naver_secret
+client_id = secret.naver_id
+client_secret = secret.naver_secret
 debug = options.debug
 
 # noinspection PyTypeChecker

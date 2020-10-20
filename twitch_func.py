@@ -1,10 +1,11 @@
 import requests
 import options
+import secret
 
 object_streamer=options.streamer
 
-client_id=options.twitch_id
-client_secret=options.twitch_secret
+client_id=secret.twitch_id
+client_secret=secret.twitch_secret
 
 access_token=""
 
