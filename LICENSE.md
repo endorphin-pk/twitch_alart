@@ -1,5 +1,5 @@
 
-Copyright (c) 2020, 방은찬
+Copyright (c) 2020, _endorphin
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
